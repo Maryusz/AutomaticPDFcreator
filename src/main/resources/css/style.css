@@ -1,0 +1,9 @@
+#label-info {
+    -fx-font-size: 10px;
+}
+
+#path-labels {
+    -fx-font-size: 16px;
+    -fx-border-color: "gray";
+    -fx-border-radius: 2px;
+}

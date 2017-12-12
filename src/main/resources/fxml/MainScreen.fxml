@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="930.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariusz.bilda.pdfcreator.MainScreenController">
+   <children>
+      <ButtonBar buttonMinWidth="30.0" layoutX="389.0" layoutY="378.0" prefHeight="58.0" prefWidth="530.0" AnchorPane.rightAnchor="11.0">
+         <buttons>
+            <JFXButton id="label-info" onAction="#chooseDirectory" text="Cambia cartella&#10;da osservare" textAlignment="CENTER">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/icons8_Folder_Tree_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <ripplerFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                     <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="#0dc7ff" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </ripplerFill></JFXButton>
+            <JFXButton id="label-info" onAction="#chooseDestinationDir" text="Cambia cartella &#10;di destinazione">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/icons8_Folder_Tree_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <ripplerFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                     <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="#0dc7ff" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </ripplerFill>
+            </JFXButton>
+            <JFXButton id="label-info" onAction="#createPDFFile" text="Crea PDF">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/icons8_PDF_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <ripplerFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                     <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="#0dc7ff" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </ripplerFill></JFXButton>
+         </buttons>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </ButtonBar>
+      <ScrollPane layoutY="103.0" prefHeight="200.0" prefWidth="930.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="103.0">
+         <content>
+            <HBox fx:id="imageBox" prefHeight="195.0" prefWidth="0.0" spacing="5.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></HBox>
+         </content>
+      </ScrollPane>
+      <Label id="label-info" layoutX="21.0" layoutY="320.0" text="Pagine caricate:" AnchorPane.leftAnchor="21.0">
+         <graphic>
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/icons8_Two_Pages_96px.png" />
+               </image>
+            </ImageView>
+         </graphic></Label>
+      <Label fx:id="labelNumberOfPages" layoutX="191.0" layoutY="337.0" text="0" AnchorPane.leftAnchor="191.0" />
+      <HBox alignment="CENTER" layoutX="11.0" layoutY="36.0" prefHeight="50.0" prefWidth="909.0" spacing="15.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <Label id="label-info" text="Cartella attualmente&#10;osservata">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/icons8_Binoculars_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Label id="path-labels" fx:id="labelWatchedDirectory">
+               <tooltip>
+                  <Tooltip text="Questa è la directory che verrà osservata dal programma, quando un immagine verrà inserita essa sarà aggiunta alla lista delle immagini sotto." />
+               </tooltip></Label>
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/icons8_Downloads_Folder_96px.png" />
+               </image>
+            </ImageView>
+            <Label id="label-info" text="Cartella&#10;desinazione" textAlignment="CENTER" />
+            <Label id="path-labels" fx:id="labelSaveDir">
+               <tooltip>
+                  <Tooltip text="Questa è la cartella di destinazione del file PDF." />
+               </tooltip></Label>
+         </children>
+      </HBox>
+      <JFXCheckBox fx:id="checkboxDelete" layoutX="21.0" layoutY="407.0" text="Cancella i file dopo aver creato il PDF" AnchorPane.leftAnchor="21.0" />
+      <MenuBar layoutX="389.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Informazioni">
+               <items>
+                  <MenuItem disable="true" mnemonicParsing="false" onAction="#showLogWindow" text="Mostra log..." />
+                  <MenuItem mnemonicParsing="false" onAction="#showDeveloperInfo" text="Sviluppatore..." />
+               </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>
