@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.xml.sax.SAXParseException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,14 +69,16 @@ public class MainScreenController implements Initializable{
         properties = new Properties();
 
         try {
+            logger.log(Level.INFO, "Trying to load properties...");
             properties.loadFromXML(new FileInputStream("settings.xml"));
-            logger.log(Level.INFO, "Properties loaded");
+
+            pathToObserve = properties.getProperty("directoryToWatch");
+            saveDirectory = properties.getProperty("saveDirectory");
         } catch (IOException ioe ){
             logger.log(Level.SEVERE, ioe.toString());
 
         }
-        pathToObserve = properties.getProperty("directoryToWatch");
-        saveDirectory = properties.getProperty("saveDirectory");
+
 
         labelWatchedDirectory.setText(pathToObserve);
         labelSaveDir.setText(saveDirectory);
