@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Main:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Main_jar</output-path>
+    <root id="archive" name="Main.jar">
+      <element id="module-output" name="Main" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/pdfbox/fontbox/2.0.8/fontbox-2.0.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/jfoenix/jfoenix/1.11.1/jfoenix-1.11.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.2/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/pdfbox/pdfbox/2.0.8/pdfbox-2.0.8.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

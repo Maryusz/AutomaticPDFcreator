@@ -1,3 +1,5 @@
+package com.mariuszbilda;
+
 import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

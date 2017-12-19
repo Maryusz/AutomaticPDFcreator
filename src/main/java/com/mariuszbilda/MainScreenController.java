@@ -1,3 +1,5 @@
+package com.mariuszbilda;
+
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -14,12 +16,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.xml.sax.SAXParseException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
 
@@ -62,6 +60,9 @@ public class MainScreenController implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
+
         imageBox.setCache(true);
         pageCounter = 0;
         logger = Logger.getLogger(getClass().getName());
@@ -76,9 +77,20 @@ public class MainScreenController implements Initializable{
             saveDirectory = properties.getProperty("saveDirectory");
         } catch (IOException ioe ){
             logger.log(Level.SEVERE, ioe.toString());
+        } finally {
+            try {
+                logger.log(Level.WARNING, "Creating a new empty setting file.");
+                FileOutputStream newSettingsFile = new FileOutputStream("settings.xml");
+                properties.setProperty("saveDirectory", "C:\\");
+                properties.setProperty("directoryToWatch", "C:\\");
+                properties.storeToXML(newSettingsFile, "");
 
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
 
         labelWatchedDirectory.setText(pathToObserve);
         labelSaveDir.setText(saveDirectory);
@@ -96,14 +108,6 @@ public class MainScreenController implements Initializable{
         pathToObserve = file.getPath();
         labelWatchedDirectory.setText(pathToObserve);
 
-
-        try {
-            properties.storeToXML(new FileOutputStream("settings.xml"), "");
-            logger.log(Level.INFO, "Properties saved");
-        } catch (IOException ioe ){
-            logger.log(Level.SEVERE, ioe.toString());
-        }
-
         watcherService();
     }
 
@@ -116,6 +120,7 @@ public class MainScreenController implements Initializable{
         labelSaveDir.setText(saveDirectory);
         try {
             properties.storeToXML(new FileOutputStream("settings.xml"), "");
+
             logger.log(Level.INFO, "Properties saved");
         } catch (IOException ioe ){
             logger.log(Level.SEVERE, ioe.toString());
@@ -177,7 +182,7 @@ public class MainScreenController implements Initializable{
     }
 
     /**
-     * This method instantiate PDFManager, and permits to add pages taking path from listOfFiles,
+     * This method instantiate com.mariuszbilda.PDFManager, and permits to add pages taking path from listOfFiles,
      * then clear the GUI, create the PDF file and delete or not the files used.
      * @param actionEvent
      */
