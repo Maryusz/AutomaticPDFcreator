@@ -1,15 +1,11 @@
 package com.mariuszbilda;
 
-import com.sun.istack.internal.NotNull;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.printing.Scaling;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +30,7 @@ public class PDFManager {
      * This method take a path of one image and add it to the PDF document.
      * @param imagePath path of the image
      */
-    @NotNull
+
     public void addPage(String imagePath) {
 
         pageNumber++;
