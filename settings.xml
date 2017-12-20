@@ -2,6 +2,6 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment/>
-<entry key="directoryToWatch">C:\Users\Mariusz\Desktop\imm</entry>
-<entry key="saveDirectory">C:\Users\Mariusz\Desktop\res</entry>
+<entry key="directoryToWatch">C:\</entry>
+<entry key="saveDirectory">C:\</entry>
 </properties>

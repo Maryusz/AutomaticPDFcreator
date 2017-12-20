@@ -5,6 +5,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.printing.Scaling;
 
@@ -18,10 +21,12 @@ import java.util.logging.Logger;
 public class PDFManager {
     private PDDocument doc = null;
     private Logger logger;
+    private int pageNumber;
 
     public PDFManager() {
         doc = new PDDocument();
         logger = Logger.getLogger("PDF MANAGER");
+        pageNumber = 0;
     }
 
     /**
@@ -32,7 +37,7 @@ public class PDFManager {
     @NotNull
     public void addPage(String imagePath) {
 
-
+        pageNumber++;
         try {
             PDImageXObject pdImageXObject = PDImageXObject.createFromFileByContent(new File(imagePath), doc);
             PDRectangle pageSize = PDRectangle.A4;
@@ -67,6 +72,14 @@ public class PDFManager {
             try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
 
                 contentStream.drawImage(pdImageXObject, x,y, scaledWidth, scaledHeight);
+                /**
+                 * This part "signs" the pdf and adds the pagination
+                 */
+                contentStream.beginText();
+                contentStream.newLineAtOffset(scaledWidth / 2, 2);
+                contentStream.setFont(PDType1Font.HELVETICA, 6);
+                contentStream.showText("APDFC 0.6.1 - Page:   " + pageNumber);
+                contentStream.endText();
 
             }
 
