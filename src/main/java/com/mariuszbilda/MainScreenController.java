@@ -2,6 +2,8 @@ package com.mariuszbilda;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,8 +22,10 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
-
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +38,7 @@ public class MainScreenController implements Initializable{
     private Map<String, ImageView> listOfFiles;
     private DirectoryChooser directoryChooser;
 
-    private int pageCounter;
+    private IntegerProperty pageCounter;
     @FXML
     private AnchorPane root;
 
@@ -60,15 +64,17 @@ public class MainScreenController implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
-
+        //Essential initializations
         imageBox.setCache(true);
-        pageCounter = 0;
         logger = Logger.getLogger(getClass().getName());
         listOfFiles = new LinkedHashMap<>();
         properties = new Properties();
 
+        // Counter of pages and its binding
+        pageCounter = new SimpleIntegerProperty(0);
+        labelNumberOfPages.textProperty().bind(pageCounter.asString());
+
+        // Setting loading, and absence of a setting file managed
         try {
             logger.log(Level.INFO, "Trying to load properties...");
             properties.loadFromXML(new FileInputStream("settings.xml"));
@@ -92,6 +98,7 @@ public class MainScreenController implements Initializable{
             }
         }
 
+        // Setting of folders and start of watch service
         labelWatchedDirectory.setText(pathToObserve);
         labelSaveDir.setText(saveDirectory);
         watcherService();
@@ -132,6 +139,7 @@ public class MainScreenController implements Initializable{
      * it adds it to the visual part (HBox) and to the data structure (in this case a LinkedHashMap, for order preservation)
      */
     private void watcherService(){
+
         try {
             WatchService ws = FileSystems.getDefault().newWatchService();
             Path path = Paths.get(pathToObserve);
@@ -157,8 +165,9 @@ public class MainScreenController implements Initializable{
 
                                         imageBox.getChildren().add(listOfFiles.get(pathToObserve + "\\" + event.context()));
                                         logger.log(Level.INFO, "Adding " + listOfFiles.get(pathToObserve + "\\" + event.context()) + " to HBox");
-                                        pageCounter++;
-                                        labelNumberOfPages.setText(""+pageCounter);
+                                        pageCounter.setValue(pageCounter.getValue() + 1);
+
+
                                     });
                                 }
                             }
@@ -188,6 +197,7 @@ public class MainScreenController implements Initializable{
      */
     public void createPDFFile(ActionEvent actionEvent) {
 
+        pageCounter.set(0);
         PDFManager pdfManager = new PDFManager();
         for (String s : listOfFiles.keySet()){
             pdfManager.addPage(s);
@@ -207,7 +217,6 @@ public class MainScreenController implements Initializable{
 
         }
 
-        pageCounter = 0;
         imageBox.getChildren().clear();
         listOfFiles.clear();
 
