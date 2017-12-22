@@ -197,6 +197,10 @@ public class MainScreenController implements Initializable{
      */
     public void createPDFFile(ActionEvent actionEvent) {
 
+        //TODO: Verificare se è presente almeno un file immagine nella listOfFiles
+        //TODO: verificare se il dato fornito è un file o una cartella
+
+
         pageCounter.set(0);
         PDFManager pdfManager = new PDFManager();
         for (String s : listOfFiles.keySet()){
