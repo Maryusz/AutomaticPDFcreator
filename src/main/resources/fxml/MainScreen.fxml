@@ -75,14 +75,17 @@
       </ScrollPane>
       <Label id="label-info" layoutX="21.0" layoutY="320.0" text="Pagine caricate:" AnchorPane.leftAnchor="21.0">
          <graphic>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/icons8_Two_Pages_96px.png" />
-               </image>
-            </ImageView>
+             <StackPane>
+                 <children>
+                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../icons/icons8_Two_Pages_96px.png"/>
+                         </image>
+                     </ImageView>
+                     <Label id="label-number" fx:id="labelNumberOfPages" text="0"/>
+                 </children>
+             </StackPane>
          </graphic></Label>
-      <Label fx:id="labelNumberOfPages" layoutX="191.0" layoutY="337.0" text="0" AnchorPane.leftAnchor="191.0"
-             id="label-number"/>
       <HBox alignment="CENTER" layoutX="11.0" layoutY="36.0" prefHeight="50.0" prefWidth="909.0" spacing="15.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0">
          <children>
             <Label id="label-info" text="Cartella attualmente&#10;osservata">

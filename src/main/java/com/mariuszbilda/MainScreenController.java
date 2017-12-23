@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,7 +36,7 @@ public class MainScreenController implements Initializable{
     private Logger logger;
     private String pathToObserve;
     private String saveDirectory;
-    private Map<String, ImageView> listOfFiles;
+    private Map<File, ImageView> listOfFiles;
     private DirectoryChooser directoryChooser;
 
     private IntegerProperty pageCounter;
@@ -81,9 +82,8 @@ public class MainScreenController implements Initializable{
 
             pathToObserve = properties.getProperty("directoryToWatch");
             saveDirectory = properties.getProperty("saveDirectory");
-        } catch (IOException ioe ){
+        } catch (IOException ioe) {
             logger.log(Level.SEVERE, ioe.toString());
-        } finally {
             try {
                 logger.log(Level.WARNING, "Creating a new empty setting file.");
                 FileOutputStream newSettingsFile = new FileOutputStream("settings.xml");
@@ -101,6 +101,15 @@ public class MainScreenController implements Initializable{
         // Setting of folders and start of watch service
         labelWatchedDirectory.setText(pathToObserve);
         labelSaveDir.setText(saveDirectory);
+
+        checkboxDelete.selectedProperty().addListener(observable -> {
+            if (checkboxDelete.isSelected()) {
+                String content = "Abilitando questa impostazione i file immagine originali che verranno utilizzati per creare il PDF verranno eliminati NESSUNA senza possibilità di recupero!";
+                Alert a = new Alert(Alert.AlertType.WARNING, content);
+                a.showAndWait();
+            }
+        });
+
         watcherService();
     }
 
@@ -158,13 +167,17 @@ public class MainScreenController implements Initializable{
                                 if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)) {
 
                                     Platform.runLater(() -> {
+
+                                        // TODO: Creare un metodo per verificare se viene aggiunto un File o una Directory e se è una directory, chiedere se si vuole osservare i file creati in questa sottocartella
+
+
                                         Image image = new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false);
                                         ImageView imageView = new ImageView(image);
 
-                                        listOfFiles.put(pathToObserve + "\\" + event.context(), imageView);
+                                        listOfFiles.put(new File(pathToObserve + "\\" + event.context()), imageView);
 
-                                        imageBox.getChildren().add(listOfFiles.get(pathToObserve + "\\" + event.context()));
-                                        logger.log(Level.INFO, "Adding " + listOfFiles.get(pathToObserve + "\\" + event.context()) + " to HBox");
+                                        imageBox.getChildren().add(imageView);
+                                        logger.log(Level.INFO, "Adding image to HBox");
                                         pageCounter.setValue(pageCounter.getValue() + 1);
 
 
@@ -197,32 +210,35 @@ public class MainScreenController implements Initializable{
      */
     public void createPDFFile(ActionEvent actionEvent) {
 
-        //TODO: Verificare se è presente almeno un file immagine nella listOfFiles
-        //TODO: verificare se il dato fornito è un file o una cartella
+        if (listOfFiles.keySet().size() == 0) {
+            // If there's no images to transform in PDF, an alert its showed
+            showNoImageAlert();
 
+        } else {
 
-        pageCounter.set(0);
-        PDFManager pdfManager = new PDFManager();
-        for (String s : listOfFiles.keySet()){
-            pdfManager.addPage(s);
-           logger.log(Level.INFO, "Page added.");
-        }
-
-        pdfManager.savePDF(saveDirectory);
-
-
-        //TODO: Enable autoreset and autodelet of the processed files.
-        if (checkboxDelete.isSelected()) {
-            for (String s : listOfFiles.keySet()){
-                logger.log(Level.WARNING, String.format("%s deleted.", s));
-                File file = new File(s);
-                System.out.println(file.delete());
+            pageCounter.set(0);
+            PDFManager pdfManager = new PDFManager();
+            for (File f : listOfFiles.keySet()) {
+                pdfManager.addPage(f);
+                logger.log(Level.INFO, "Page added.");
             }
 
-        }
+            pdfManager.savePDF(saveDirectory);
 
-        imageBox.getChildren().clear();
-        listOfFiles.clear();
+
+            //TODO: Enable autoreset and autodelet of the processed files.
+            if (checkboxDelete.isSelected()) {
+                for (File f : listOfFiles.keySet()) {
+                    logger.log(Level.WARNING, String.format("%s deleted.", f));
+
+                    System.out.println(f.delete());
+                }
+
+            }
+
+            imageBox.getChildren().clear();
+            listOfFiles.clear();
+        }
 
     }
 
@@ -244,5 +260,15 @@ public class MainScreenController implements Initializable{
         }
 
 
+    }
+
+    private void showNoImageAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText("Nessuna immagine rilevata!");
+        alert.setTitle("Nessuna immagine da trasformare in PDF.");
+        alert.setContentText("Non è stata rilevata nessuna immagine da trasformare in PDF, " +
+                "verifica che ci sia almeno un'immagine (presente nella schermata o rilevata tramite numero)" +
+                " altrimenti non sarà possibile creare il file PDF!");
+        alert.showAndWait();
     }
 }

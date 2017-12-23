@@ -28,14 +28,14 @@ public class PDFManager {
     /**
      * https://gist.github.com/mmdemirbas/209b4bdb66b788e785266f97204b8631
      * This method take a path of one image and add it to the PDF document.
-     * @param imagePath path of the image
+     * @param file image to add
      */
 
-    public void addPage(String imagePath) {
+    public void addPage(File file) {
 
         pageNumber++;
         try {
-            PDImageXObject pdImageXObject = PDImageXObject.createFromFileByContent(new File(imagePath), doc);
+            PDImageXObject pdImageXObject = PDImageXObject.createFromFileByContent(file, doc);
             PDRectangle pageSize = PDRectangle.A4;
 
             int originalWidth = pdImageXObject.getWidth();
