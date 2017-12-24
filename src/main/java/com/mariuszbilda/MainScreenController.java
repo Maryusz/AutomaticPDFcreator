@@ -1,6 +1,7 @@
 package com.mariuszbilda;
 
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXProgressBar;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,6 +59,10 @@ public class MainScreenController implements Initializable{
 
     @FXML
     private JFXCheckBox checkboxDelete;
+
+    @FXML
+    private JFXProgressBar progress;
+
 
     /**
      * Initialize instantiate all essential data structures and properties loader.
@@ -168,17 +174,20 @@ public class MainScreenController implements Initializable{
 
                                     Platform.runLater(() -> {
 
-                                        // TODO: Creare un metodo per verificare se viene aggiunto un File o una Directory e se è una directory, chiedere se si vuole osservare i file creati in questa sottocartella
+                                        File file = new File(pathToObserve + "\\" + event.context());
 
+                                        /**
+                                         * The WatcherService detects if the new file in the directory is a File or a Directory,
+                                         * if its a file, it porcess it as normale, if its a directory, an alert is showed
+                                         * and its asked if the user want to change the watched directory to the directory registered.
+                                         */
+                                        if (file.isFile()) {
+                                            fileDetected(event, file);
+                                        }
 
-                                        Image image = new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false);
-                                        ImageView imageView = new ImageView(image);
-
-                                        listOfFiles.put(new File(pathToObserve + "\\" + event.context()), imageView);
-
-                                        imageBox.getChildren().add(imageView);
-                                        logger.log(Level.INFO, "Adding image to HBox");
-                                        pageCounter.setValue(pageCounter.getValue() + 1);
+                                        if (file.isDirectory()) {
+                                            directoryDetected(event);
+                                        }
 
 
                                     });
@@ -203,42 +212,97 @@ public class MainScreenController implements Initializable{
         }
     }
 
+    private void fileDetected(WatchEvent<?> event, File file) {
+
+        Image image = new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false);
+        ImageView imageView = new ImageView(image);
+
+        listOfFiles.put(file, imageView);
+
+        imageBox.getChildren().add(imageView);
+        logger.log(Level.INFO, "Adding image to HBox");
+        pageCounter.setValue(pageCounter.getValue() + 1);
+    }
+
+    private void directoryDetected(WatchEvent<?> event) {
+        logger.log(Level.INFO, "Directory creation detected...");
+        String content = "E' stata rilveta la creazione di una sottocartella nella cartella da te osservata, " +
+                "seleziona il tasto OK se non sei certo e prova a fare una scansione, altrimenti se la cartella l'hai creata tu per altri scopi," +
+                "seleziona il tasto Annulla";
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, content);
+        if (a.showAndWait().get() == ButtonType.OK) {
+            pathToObserve = pathToObserve + "\\" + event.context();
+
+            logger.log(Level.CONFIG, "New path to observe: " + pathToObserve);
+
+            // Restart WatchService
+            watcherService();
+        }
+    }
+
     /**
      * This method instantiate com.mariuszbilda.PDFManager, and permits to add pages taking path from listOfFiles,
      * then clear the GUI, create the PDF file and delete or not the files used.
+     *
+     * A task is launched to not freeze the gui, and the progress bar is updated for the creation of single pages.
      * @param actionEvent
      */
     public void createPDFFile(ActionEvent actionEvent) {
+        Task<Void> pdfCreationTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                updateProgress(0.0, 1000.0);
 
-        if (listOfFiles.keySet().size() == 0) {
-            // If there's no images to transform in PDF, an alert its showed
-            showNoImageAlert();
+                if (listOfFiles.keySet().size() == 0) {
+                    // If there's no images to transform in PDF, an alert its showed
+                    showNoImageAlert();
+                    updateProgress(1000.0, 1000.0);
 
-        } else {
+                } else {
 
-            pageCounter.set(0);
-            PDFManager pdfManager = new PDFManager();
-            for (File f : listOfFiles.keySet()) {
-                pdfManager.addPage(f);
-                logger.log(Level.INFO, "Page added.");
-            }
+                    Platform.runLater(() -> {
+                        pageCounter.set(0);
+                    });
 
-            pdfManager.savePDF(saveDirectory);
+                    PDFManager pdfManager = new PDFManager();
 
+                    // calculation for progress bar
+                    double part = 1000.0 / listOfFiles.keySet().size();
+                    double actual = 0;
+                    for (File f : listOfFiles.keySet()) {
+                        actual += part;
+                        pdfManager.addPage(f);
+                        updateProgress(actual, 1000.0);
+                        logger.log(Level.INFO, "Page added.");
+                    }
 
-            //TODO: Enable autoreset and autodelet of the processed files.
-            if (checkboxDelete.isSelected()) {
-                for (File f : listOfFiles.keySet()) {
-                    logger.log(Level.WARNING, String.format("%s deleted.", f));
+                    pdfManager.savePDF(saveDirectory);
+                    updateProgress(1000.0, 1000.0);
 
-                    System.out.println(f.delete());
+                    if (checkboxDelete.isSelected()) {
+                        for (File f : listOfFiles.keySet()) {
+                            logger.log(Level.WARNING, String.format("%s deleted.", f));
+
+                            System.out.println(f.delete());
+                        }
+
+                    }
+
+                    Platform.runLater(() -> {
+                        imageBox.getChildren().clear();
+                        listOfFiles.clear();
+                    });
                 }
 
+                return null;
             }
+        };
 
-            imageBox.getChildren().clear();
-            listOfFiles.clear();
-        }
+        progress.progressProperty().bind(pdfCreationTask.progressProperty());
+
+        Thread t = new Thread(pdfCreationTask);
+        t.setDaemon(true);
+        t.start();
 
     }
 

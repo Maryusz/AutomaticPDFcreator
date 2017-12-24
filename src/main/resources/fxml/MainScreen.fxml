@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -124,5 +123,7 @@
           </Menu>
         </menus>
       </MenuBar>
+       <JFXProgressBar fx:id="progress" layoutY="102.0" progress="0.0" AnchorPane.leftAnchor="0.0"
+                       AnchorPane.rightAnchor="0.0"/>
    </children>
 </AnchorPane>
