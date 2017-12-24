@@ -184,12 +184,9 @@ public class MainScreenController implements Initializable{
                                         if (file.isFile()) {
                                             fileDetected(event, file);
                                         }
-
                                         if (file.isDirectory()) {
                                             directoryDetected(event);
                                         }
-
-
                                     });
                                 }
                             }
@@ -231,9 +228,10 @@ public class MainScreenController implements Initializable{
                 "seleziona il tasto Annulla";
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, content);
         if (a.showAndWait().get() == ButtonType.OK) {
-            pathToObserve = pathToObserve + "\\" + event.context();
+            pathToObserve += "\\" + event.context();
 
-            logger.log(Level.CONFIG, "New path to observe: " + pathToObserve);
+
+            logger.log(Level.INFO, "New path to observe: " + pathToObserve);
 
             // Restart WatchService
             watcherService();
@@ -255,11 +253,13 @@ public class MainScreenController implements Initializable{
 
                 if (listOfFiles.keySet().size() == 0) {
                     // If there's no images to transform in PDF, an alert its showed
-                    showNoImageAlert();
-                    updateProgress(1000.0, 1000.0);
+                    Platform.runLater(() -> {
+                        showNoImageAlert();
+                    });
+
 
                 } else {
-
+                    progress.setId("bar");
                     Platform.runLater(() -> {
                         pageCounter.set(0);
                     });
@@ -281,16 +281,14 @@ public class MainScreenController implements Initializable{
 
                     if (checkboxDelete.isSelected()) {
                         for (File f : listOfFiles.keySet()) {
+                            f.delete();
                             logger.log(Level.WARNING, String.format("%s deleted.", f));
-
-                            System.out.println(f.delete());
                         }
-
                     }
-
                     Platform.runLater(() -> {
                         imageBox.getChildren().clear();
                         listOfFiles.clear();
+
                     });
                 }
 
