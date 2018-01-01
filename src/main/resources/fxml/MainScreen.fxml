@@ -120,7 +120,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Informazioni">
                <items>
-                   <MenuItem disable="true" mnemonicParsing="false" onAction="#showLogWindow" text="Mostra log...">
+                   <MenuItem mnemonicParsing="false" onAction="#showLogWindow" text="Mostra log...">
                        <graphic>
                            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                <image>

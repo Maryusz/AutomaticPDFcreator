@@ -71,6 +71,8 @@ public class MainScreenController implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
         //Essential initializations
         imageBox.setCache(true);
         logger = Logger.getLogger(getClass().getName());
@@ -163,7 +165,7 @@ public class MainScreenController implements Initializable{
 
             Task<Void> task = new Task<Void>() {
                 @Override
-                protected Void call() throws Exception {
+                protected Void call() {
 
                     WatchKey key;
                     try {
@@ -248,7 +250,7 @@ public class MainScreenController implements Initializable{
     public void createPDFFile(ActionEvent actionEvent) {
         Task<Void> pdfCreationTask = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 updateProgress(0.0, 1000.0);
 
                 if (listOfFiles.keySet().size() == 0) {
@@ -305,7 +307,7 @@ public class MainScreenController implements Initializable{
     }
 
     public void showLogWindow(ActionEvent actionEvent) {
-        //TODO: Aggiungere la possibilita di visualizzare il log.
+        //TODO: show log on another window...
     }
 
     public void showDeveloperInfo(ActionEvent actionEvent) {
