@@ -12,9 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -40,8 +38,8 @@ public class MainScreenController implements Initializable{
     private String saveDirectory;
     private Map<File, ImageView> listOfFiles;
     private DirectoryChooser directoryChooser;
-
     private IntegerProperty pageCounter;
+
     @FXML
     private AnchorPane root;
 
@@ -62,6 +60,9 @@ public class MainScreenController implements Initializable{
 
     @FXML
     private JFXProgressBar progress;
+
+    @FXML
+    private MenuItem menuItemReset;
 
 
     /**
@@ -118,8 +119,24 @@ public class MainScreenController implements Initializable{
             }
         });
 
+        //TODO: Impostare il tasto reset per resettare la creazione di un PDF.
+        menuItemReset.setOnAction(e -> {
+            pageCounter.setValue(0);
+            for (File f : listOfFiles.keySet()) {
+                f.delete();
+                logger.log(Level.WARNING, String.format("%s deleted.", f));
+            }
+
+            listOfFiles.clear();
+
+            Platform.runLater(() -> {
+                imageBox.getChildren().clear();
+            });
+
+        });
         watcherService();
     }
+
 
 
     @FXML
@@ -173,6 +190,9 @@ public class MainScreenController implements Initializable{
                             for (WatchEvent<?> event : key.pollEvents()) {
 
                                 if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)) {
+                                    //TODO: DA PROVARE
+                                    // Messo lo sleep per dare all'altro processo il tempo di salvare l'immagine.
+                                    Thread.sleep(300);
 
                                     Platform.runLater(() -> {
 
@@ -215,6 +235,8 @@ public class MainScreenController implements Initializable{
 
         Image image = new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false);
         ImageView imageView = new ImageView(image);
+        imageView.setCache(true);
+        addContextMenu(imageView);
 
         listOfFiles.put(file, imageView);
 
@@ -310,6 +332,20 @@ public class MainScreenController implements Initializable{
         //TODO: show log on another window...
     }
 
+    private void addContextMenu(ImageView iv) {
+        iv.setOnContextMenuRequested(event -> {
+            MenuItem deleteImage = new MenuItem("Cancella");
+            MenuItem changePageNumber = new MenuItem("Cambia numero pagina");
+            MenuItem modify = new MenuItem("Modifica");
+            ContextMenu cm = new ContextMenu(deleteImage, changePageNumber, modify);
+
+
+            cm.show(iv, event.getScreenX(), event.getScreenY());
+        });
+
+
+    }
+
     public void showDeveloperInfo(ActionEvent actionEvent) {
 
         try {
@@ -322,8 +358,6 @@ public class MainScreenController implements Initializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void showNoImageAlert() {
