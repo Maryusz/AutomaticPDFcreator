@@ -334,12 +334,24 @@ public class MainScreenController implements Initializable{
     private void addContextMenu(ImageView iv) {
         iv.setOnContextMenuRequested(event -> {
             MenuItem deleteImage = new MenuItem("Cancella");
-            MenuItem changePageNumber = new MenuItem("Cambia numero pagina");
-            MenuItem modify = new MenuItem("Modifica");
-            ContextMenu cm = new ContextMenu(deleteImage, changePageNumber, modify);
 
+            ContextMenu cm = new ContextMenu(deleteImage);
+
+            deleteImage.setOnAction(event1 -> {
+                imageBox.getChildren().remove(iv);
+                File keyToRemove = new File("");
+                for (Map.Entry<File, ImageView> entry : listOfFiles.entrySet()) {
+                    if (entry.getValue().equals(iv)) {
+                        keyToRemove = entry.getKey();
+                    }
+                }
+                listOfFiles.remove(keyToRemove);
+                pageCounter.set(pageCounter.get() - 1);
+
+            });
 
             cm.show(iv, event.getScreenX(), event.getScreenY());
+
         });
 
 

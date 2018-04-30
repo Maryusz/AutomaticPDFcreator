@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PDFManager {
-    private PDDocument doc = null;
+    private PDDocument doc;
     private Logger logger;
     private int pageNumber;
 
@@ -63,11 +63,14 @@ public class PDFManager {
             logger.log(Level.INFO, String.format("X: %.2f Y: %.2f", x, y));
 
             PDPage page = new PDPage(pageSize);
+
             doc.addPage(page);
+
 
             try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
 
                 contentStream.drawImage(pdImageXObject, x,y, scaledWidth, scaledHeight);
+
                 /**
                  * This part "signs" the pdf and adds the pagination
                  */
