@@ -142,7 +142,6 @@ public class MainScreenController implements Initializable{
     @FXML
     void chooseDirectory(ActionEvent event) {
 
-
         directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(root.getScene().getWindow());
         properties.setProperty("directoryToWatch", file.getPath());
