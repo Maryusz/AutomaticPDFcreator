@@ -7,6 +7,9 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -33,6 +36,7 @@ public class PDFManager {
 
     public void addPage(File file) {
 
+
         pageNumber++;
         try {
             PDImageXObject pdImageXObject = PDImageXObject.createFromFileByContent(file, doc);
@@ -40,6 +44,13 @@ public class PDFManager {
 
             int originalWidth = pdImageXObject.getWidth();
             int originalHeight = pdImageXObject.getHeight();
+            //TODO: Analizzare questo passaggio per la rotazione e compressione dell'immagine
+            /*if (originalWidth > originalHeight) {
+                // the image must be rotated to be adapted to an A4 format
+                pdImageXObject = LosslessFactory.createFromImage(doc, rotateBufferedImage(pdImageXObject.getImage()));
+                originalWidth = pdImageXObject.getWidth();
+                originalHeight = pdImageXObject.getHeight();
+            }*/
 
             logger.log(Level.INFO, String.format("Original sizes: w: %d h: %d", originalWidth, originalHeight));
 
@@ -96,5 +107,14 @@ public class PDFManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private BufferedImage rotateBufferedImage(BufferedImage bi) {
+        logger.log(Level.INFO, "Rotating the image..");
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(1, bi.getWidth() / 2, bi.getHeight() / 2);
+        AffineTransformOp op = new AffineTransformOp(tx,
+                AffineTransformOp.TYPE_BILINEAR);
+        return op.filter(bi, null);
     }
 }

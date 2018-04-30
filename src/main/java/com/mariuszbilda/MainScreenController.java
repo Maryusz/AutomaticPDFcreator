@@ -189,9 +189,6 @@ public class MainScreenController implements Initializable{
                             for (WatchEvent<?> event : key.pollEvents()) {
 
                                 if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)) {
-                                    //TODO: DA PROVARE
-                                    // Messo lo sleep per dare all'altro processo il tempo di salvare l'immagine.
-                                    Thread.sleep(300);
 
                                     Platform.runLater(() -> {
 
@@ -345,7 +342,9 @@ public class MainScreenController implements Initializable{
                         keyToRemove = entry.getKey();
                     }
                 }
+
                 listOfFiles.remove(keyToRemove);
+                keyToRemove.delete();
                 pageCounter.set(pageCounter.get() - 1);
 
             });
