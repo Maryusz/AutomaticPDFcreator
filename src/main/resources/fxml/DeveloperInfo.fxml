@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="293.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/9.0.1" fx:controller="com.mariuszbilda.DeveloperInfo">
+            xmlns="http://javafx.com/javafx/8.0.141" fx:controller="com.mariuszbilda.DeveloperInfo">
    <children>
       <Label layoutX="63.0" layoutY="164.0" prefHeight="92.0" prefWidth="479.0" text="PDF Automatic Creator 0.6.5"
              AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="63.0" AnchorPane.rightAnchor="58.0"
@@ -25,7 +25,7 @@
             <Font name="Lato Regular" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="233.0" layoutY="271.0" text="mariusz.mab@gmail.com" underline="true">
+      <Label layoutX="233.0" layoutY="271.0" text="mariusz.mab@gmail.com" textAlignment="CENTER" underline="true">
          <font>
             <Font name="Constantia Italic" size="12.0" />
          </font>

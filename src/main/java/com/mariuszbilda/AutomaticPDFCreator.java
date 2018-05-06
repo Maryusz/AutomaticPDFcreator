@@ -23,6 +23,7 @@ public class AutomaticPDFCreator extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
+
         showNewFeatures();
     }
 

@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="930.0"
-            stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/9.0.1"
+            stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.141"
             fx:controller="com.mariuszbilda.MainScreenController">
    <children>
        <ButtonBar buttonMinWidth="30.0" layoutX="389.0" layoutY="378.0" prefHeight="58.0" prefWidth="530.0"
@@ -79,8 +79,8 @@
                </padding></HBox>
          </content>
       </ScrollPane>
-       <Label id="label-info" layoutX="14.0" layoutY="382.0" text="Pagine caricate" AnchorPane.bottomAnchor="18.0"
-              AnchorPane.leftAnchor="14.0">
+       <Label id="label-info" alignment="CENTER" layoutX="14.0" layoutY="382.0" prefHeight="50.0" prefWidth="222.0"
+              text="Pagine caricate" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="14.0">
          <graphic>
              <StackPane>
                  <children>
