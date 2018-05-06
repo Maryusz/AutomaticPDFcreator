@@ -14,9 +14,9 @@
 }
 
 #label-number {
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
     -fx-text-fill: "GRAY";
-    -fx-font-family: "ARIAL BLACK";
+    -fx-font-family: "HELVLIGHT";
 }
 
 .bar {

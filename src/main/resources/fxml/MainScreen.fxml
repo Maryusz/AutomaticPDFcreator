@@ -6,9 +6,13 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="930.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariuszbilda.MainScreenController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="930.0"
+            stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/9.0.1"
+            fx:controller="com.mariuszbilda.MainScreenController">
    <children>
-      <ButtonBar buttonMinWidth="30.0" layoutX="389.0" layoutY="378.0" prefHeight="58.0" prefWidth="530.0" AnchorPane.rightAnchor="11.0">
+       <ButtonBar buttonMinWidth="30.0" layoutX="389.0" layoutY="378.0" prefHeight="58.0" prefWidth="530.0"
+                  AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="11.0">
          <buttons>
              <JFXButton id="label-info" buttonType="RAISED" onAction="#chooseDirectory"
                         text="Cambia cartella&#10;da osservare" textAlignment="CENTER">
@@ -66,7 +70,8 @@
             <Insets right="10.0" />
          </padding>
       </ButtonBar>
-      <ScrollPane layoutY="103.0" prefHeight="200.0" prefWidth="930.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="103.0">
+       <ScrollPane layoutY="103.0" prefHeight="200.0" prefWidth="930.0" AnchorPane.bottomAnchor="147.0"
+                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="103.0">
          <content>
             <HBox fx:id="imageBox" prefHeight="195.0" prefWidth="0.0" spacing="5.0">
                <padding>
@@ -74,7 +79,8 @@
                </padding></HBox>
          </content>
       </ScrollPane>
-       <Label id="label-info" layoutX="21.0" layoutY="320.0" text="Pagine caricate" AnchorPane.leftAnchor="21.0">
+       <Label id="label-info" layoutX="14.0" layoutY="382.0" text="Pagine caricate" AnchorPane.bottomAnchor="18.0"
+              AnchorPane.leftAnchor="14.0">
          <graphic>
              <StackPane>
                  <children>
@@ -114,13 +120,22 @@
                </tooltip></Label>
          </children>
       </HBox>
-       <JFXCheckBox fx:id="checkboxDelete" checkedColor="#aa00ff" layoutX="21.0" layoutY="407.0"
-                    text="Cancella i file dopo aver creato il PDF" AnchorPane.leftAnchor="21.0"/>
+       <JFXCheckBox id="label-info" fx:id="checkboxDelete" checkedColor="#aa00ff" layoutX="727.0" layoutY="312.0"
+                    text="Cancella i file dopo aver creato il PDF" AnchorPane.bottomAnchor="120.0"
+                    AnchorPane.rightAnchor="14.0"/>
       <MenuBar layoutX="389.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
             <Menu mnemonicParsing="false" text="Menu">
                 <items>
-                    <MenuItem fx:id="menuItemReset" mnemonicParsing="false" text="Reset"/>
+                    <MenuItem fx:id="menuItemReset" mnemonicParsing="false" text="Reset">
+                        <graphic>
+                            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../icons/icons8_Reset_96px_3.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </MenuItem>
                 </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Informazioni">
@@ -149,5 +164,27 @@
       </MenuBar>
        <JFXProgressBar id="progress" fx:id="progress" layoutY="102.0" progress="0.0" AnchorPane.leftAnchor="0.0"
                        AnchorPane.rightAnchor="0.0"/>
+       <VBox alignment="CENTER" layoutX="14.0" layoutY="312.0" prefHeight="50.0" prefWidth="222.0"
+             AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="14.0">
+           <children>
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                   <children>
+                       <Label id="label-info" text="Fattore di compressione">
+                           <tooltip>
+                               <Tooltip
+                                       text="Minore è il fattore di compressione &#10;piu le immagini saranno compressa e piccola di dimensioni&#10;Va utilizzato un valore intermedio!&#10;100   = Immagine originale&#10;0 = Immagine compressa al massimo (Non usare)"/>
+                           </tooltip>
+                       </Label>
+                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                               <Image url="@../icons/icons8_Help_96px.png"/>
+                           </image>
+                       </ImageView>
+                   </children>
+               </HBox>
+               <JFXSlider fx:id="compressionFactorSlider" showTickLabels="true" showTickMarks="true" snapToTicks="true"
+                          value="65.0"/>
+           </children>
+       </VBox>
    </children>
 </AnchorPane>

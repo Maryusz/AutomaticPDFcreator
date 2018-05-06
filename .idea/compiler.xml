@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Main" />
+        <module name="AutomaticPDFCreator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="AutomaticPDFCreator" target="1.8" />
       <module name="AutomaticPDFcreator" target="1.8" />
-      <module name="Main" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

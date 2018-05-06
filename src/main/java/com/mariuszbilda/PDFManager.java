@@ -1,5 +1,7 @@
 package com.mariuszbilda;
 
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -7,25 +9,37 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PDFManager {
+    private FloatProperty compressionFactor;
     private PDDocument doc;
     private Logger logger;
     private int pageNumber;
+    private File tmpDir;
 
     public PDFManager() {
         doc = new PDDocument();
         logger = Logger.getLogger("PDF MANAGER");
         pageNumber = 0;
+        compressionFactor = new SimpleFloatProperty();
+        tmpDir = new File(System.getProperty("java.io.tmpdir"));
     }
 
     /**
@@ -39,6 +53,8 @@ public class PDFManager {
 
         pageNumber++;
         try {
+            file = compressImage(file);
+
             PDImageXObject pdImageXObject = PDImageXObject.createFromFileByContent(file, doc);
             PDRectangle pageSize = PDRectangle.A4;
 
@@ -88,7 +104,7 @@ public class PDFManager {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(scaledWidth / 2, 2);
                 contentStream.setFont(PDType1Font.HELVETICA, 6);
-                contentStream.showText("APDFC 0.6.3 - Page:   " + pageNumber);
+                contentStream.showText("APDFC 0.6.5 - Page:   " + pageNumber);
                 contentStream.endText();
 
             }
@@ -116,5 +132,59 @@ public class PDFManager {
         AffineTransformOp op = new AffineTransformOp(tx,
                 AffineTransformOp.TYPE_BILINEAR);
         return op.filter(bi, null);
+    }
+
+    /**
+     * This method compress the image received as File
+     * The compressed image is placed in TMP folder!
+     *
+     * @param file File of the image received
+     * @return path to the compressed image
+     */
+    private File compressImage(File file) {
+        logger.log(Level.INFO, "Starting image compression...");
+        File compressedImage = new File(tmpDir.getPath() + "//compressed-tmp.jpg");
+        System.out.println(compressedImage);
+
+        try {
+            BufferedImage image = ImageIO.read(file);
+
+            OutputStream os = new FileOutputStream(compressedImage);
+
+            Iterator<ImageWriter> writer = ImageIO.getImageWritersByFormatName("jpg");
+            ImageWriter imageWriter = writer.next();
+
+            ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+            imageWriter.setOutput(ios);
+
+            ImageWriteParam param = imageWriter.getDefaultWriteParam();
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            logger.log(Level.INFO, String.format("Compression factor: %.2f", getCompressionFactor()));
+            param.setCompressionQuality(getCompressionFactor());
+            imageWriter.write(null, new IIOImage(image, null, null), param);
+
+            os.close();
+            ios.close();
+            imageWriter.dispose();
+
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Error while compressing the image.");
+            e.printStackTrace();
+
+        }
+        logger.log(Level.INFO, "Image compressed succesfully!");
+        return compressedImage;
+    }
+
+    public float getCompressionFactor() {
+        return compressionFactor.get();
+    }
+
+    public void setCompressionFactor(float compressionFactor) {
+        this.compressionFactor.set(compressionFactor);
+    }
+
+    public FloatProperty compressionFactorProperty() {
+        return compressionFactor;
     }
 }

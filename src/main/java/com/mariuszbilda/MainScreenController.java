@@ -2,6 +2,7 @@ package com.mariuszbilda;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXSlider;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -19,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 import java.io.*;
 import java.net.URL;
@@ -63,6 +65,9 @@ public class MainScreenController implements Initializable{
 
     @FXML
     private MenuItem menuItemReset;
+
+    @FXML
+    private JFXSlider compressionFactorSlider;
 
 
     /**
@@ -119,7 +124,6 @@ public class MainScreenController implements Initializable{
             }
         });
 
-        //TODO: Impostare il tasto reset per resettare la creazione di un PDF.
         menuItemReset.setOnAction(e -> {
             pageCounter.setValue(0);
             for (File f : listOfFiles.keySet()) {
@@ -192,6 +196,7 @@ public class MainScreenController implements Initializable{
 
                                     Platform.runLater(() -> {
 
+
                                         File file = new File(pathToObserve + "\\" + event.context());
 
                                         /**
@@ -201,6 +206,13 @@ public class MainScreenController implements Initializable{
                                          */
                                         if (file.isFile()) {
                                             fileDetected(event, file);
+
+                                            // This shows an windows notification when a image is added!
+                                            Notifications.create()
+                                                    .title("Immagine rilevata")
+                                                    .text("Nuova immagine in coda per essere aggiunta al PDF")
+                                                    .graphic(new ImageView(new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false)))
+                                                    .show();
                                         }
                                         if (file.isDirectory()) {
                                             directoryDetected(event);
@@ -285,6 +297,7 @@ public class MainScreenController implements Initializable{
                     });
 
                     PDFManager pdfManager = new PDFManager();
+                    pdfManager.setCompressionFactor(compressionFactorSlider.valueProperty().floatValue() / 100.0f);
 
                     // calculation for progress bar
                     double part = 1000.0 / listOfFiles.keySet().size();
@@ -308,9 +321,15 @@ public class MainScreenController implements Initializable{
                     Platform.runLater(() -> {
                         imageBox.getChildren().clear();
                         listOfFiles.clear();
-
+                        Notifications.create()
+                                .title("PDF correttamente creato!")
+                                .text("PDF correttamente creato!")
+                                .graphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/icons8_Checkmark_96px_1.png"))))
+                                .show();
                     });
                 }
+
+                updateProgress(0.0, 1000.0);
 
                 return null;
             }
