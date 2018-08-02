@@ -1,10 +1,8 @@
-Novità nella v. 6.5 di APDFC:
+Novita' nella v. 6.6 di APDFC:
 
-- Aggiunte notifiche lato desktop all'aggiunta delle pagine e alla creazione del file PDF
-- Aggiunta la possibilità di eliminare le singole immagini dal PDF prima della sua creazione con il tasto destro
-- Aggiunta la possibilità resettare la creazione del file nel menu superiore
-- Aggiunta la compressioni delle singole immagini e la possibilità di modificarne il fattore tramite slider
-- Le immagini compresse vengono gestite nella cartella TMP del sistema
-- Alcuni bug minori sono stati risolti
-- Alcuni problemi grafici sono stati risolti
-- Aggiunta di questa notifica!
+- Modificato layout anteprima visualizzazione pagine
+- Impostato valore di default della compressione a 35
+- Impostazione valore di attesa di 1 secondo prima di leggere un immagine per evitare
+  che venga letta mentre viene creata.
+- Ridotto il tempo della notifica iniziale
+- Adesso le immagini sono trascinabili con mouse per la visualizzazione

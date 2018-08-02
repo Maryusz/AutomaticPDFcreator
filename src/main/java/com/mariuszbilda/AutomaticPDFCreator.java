@@ -19,7 +19,7 @@ public class AutomaticPDFCreator extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.getIcons().add(new Image("/icons/icons8_Parchment_96px.png"));
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainScreen.fxml"));
-        primaryStage.setTitle("Automatic PDF Creator - v. 0.6.5 Mariusz A. Bilda");
+        primaryStage.setTitle("Automatic PDF Creator - v. 0.6.6 Mariusz A. Bilda");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
@@ -43,7 +43,7 @@ public class AutomaticPDFCreator extends Application {
                 .title("Aggiornamenti e note sulla nuova versione di Automatic PDF Creator!")
                 .graphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/icons8_Parchment_96px.png"))))
                 .text(text)
-                .hideAfter(Duration.minutes(2))
+                .hideAfter(Duration.seconds(30.0))
                 .show();
     }
 }

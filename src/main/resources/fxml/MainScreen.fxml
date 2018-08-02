@@ -6,10 +6,9 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="930.0"
-            stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.141"
-            fx:controller="com.mariuszbilda.MainScreenController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308" minWidth="930.0" prefWidth="930.0" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/8.0.171" fx:controller="com.mariuszbilda.MainScreenController">
    <children>
        <ButtonBar buttonMinWidth="30.0" layoutX="389.0" layoutY="378.0" prefHeight="58.0" prefWidth="530.0"
                   AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="11.0">
@@ -70,13 +69,11 @@
             <Insets right="10.0" />
          </padding>
       </ButtonBar>
-       <ScrollPane layoutY="103.0" prefHeight="200.0" prefWidth="930.0" AnchorPane.bottomAnchor="147.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="103.0">
+       <ScrollPane fitToWidth="true" layoutY="103.0" minHeight="350.0" minWidth="930.0" pannable="true" vvalue="1.0"
+                   AnchorPane.bottomAnchor="164.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"
+                   AnchorPane.topAnchor="81.0">
          <content>
-            <HBox fx:id="imageBox" prefHeight="195.0" prefWidth="0.0" spacing="5.0">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding></HBox>
+             <HBox fx:id="imageBox" fillHeight="false" minHeight="300.0"/>
          </content>
       </ScrollPane>
        <Label id="label-info" alignment="CENTER" layoutX="14.0" layoutY="382.0" prefHeight="50.0" prefWidth="222.0"
@@ -93,7 +90,8 @@
                  </children>
              </StackPane>
          </graphic></Label>
-      <HBox alignment="CENTER" layoutX="11.0" layoutY="36.0" prefHeight="50.0" prefWidth="909.0" spacing="15.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0">
+       <HBox alignment="CENTER" layoutX="11.0" layoutY="36.0" prefHeight="50.0" prefWidth="909.0" spacing="15.0"
+             AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
          <children>
             <Label id="label-info" text="Cartella attualmente&#10;osservata">
                <graphic>
@@ -162,10 +160,10 @@
           </Menu>
         </menus>
       </MenuBar>
-       <JFXProgressBar id="progress" fx:id="progress" layoutY="102.0" progress="0.0" AnchorPane.leftAnchor="0.0"
-                       AnchorPane.rightAnchor="0.0"/>
+       <JFXProgressBar id="progress" fx:id="progress" layoutY="99.0" progress="0.0" AnchorPane.leftAnchor="15.0"
+                       AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0"/>
        <VBox alignment="CENTER" layoutX="14.0" layoutY="312.0" prefHeight="50.0" prefWidth="222.0"
-             AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="14.0">
+             AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="14.0">
            <children>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                    <children>
@@ -183,7 +181,7 @@
                    </children>
                </HBox>
                <JFXSlider fx:id="compressionFactorSlider" showTickLabels="true" showTickMarks="true" snapToTicks="true"
-                          value="65.0"/>
+                          value="35.0"/>
            </children>
        </VBox>
    </children>

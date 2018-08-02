@@ -241,16 +241,35 @@ public class MainScreenController implements Initializable{
 
     private void fileDetected(WatchEvent<?> event, File file) {
 
-        Image image = new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false);
-        ImageView imageView = new ImageView(image);
-        imageView.setCache(true);
-        addContextMenu(imageView);
+        // sleeper task will give time to the other process to save the image so only the APDFC can load it.
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    logger.log(Level.SEVERE, "Applicazione interrotta\n" + e.getMessage());
+                }
+                return null;
+            }
+        };
 
-        listOfFiles.put(file, imageView);
+        sleeper.setOnSucceeded(event1 -> {
+            pageCounter.setValue(pageCounter.getValue() + 1);
+            Image image = new Image("file:" + pathToObserve + "\\" + event.context(), 200, 300, true, false);
+            ImageItem ii = new ImageItem();
+            ii.setImageObjectProperty(image);
+            addContextMenu(ii.iv_image);
 
-        imageBox.getChildren().add(imageView);
-        logger.log(Level.INFO, "Adding image to HBox");
-        pageCounter.setValue(pageCounter.getValue() + 1);
+            listOfFiles.put(file, ii.iv_image);
+            ii.pageNumberProperty().bind(pageCounter.asString());
+            ii.pageNumberProperty().unbind();
+            imageBox.getChildren().add(ii);
+            logger.log(Level.INFO, "Adding image to HBox");
+        });
+
+        new Thread(sleeper).start();
+
     }
 
     private void directoryDetected(WatchEvent<?> event) {

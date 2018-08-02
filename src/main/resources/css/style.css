@@ -22,3 +22,18 @@
 .bar {
     -fx-background-color: #AA00FF;
 }
+
+.image-item {
+    -fx-background-color: #bae1ff;
+    -fx-border-width: 1;
+
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-background-insets: 15;
+    -fx-border-insets: 15;
+    -fx-effect: dropshadow( three-pass-box, rgba(172, 172, 172, 1.0), 3,0.4,5,5 );
+}
+
+#image-text {
+    -fx-text-fill: #696969;
+}

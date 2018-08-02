@@ -104,7 +104,7 @@ public class PDFManager {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(scaledWidth / 2, 2);
                 contentStream.setFont(PDType1Font.HELVETICA, 6);
-                contentStream.showText("APDFC 0.6.5 - Page:   " + pageNumber);
+                contentStream.showText("APDFC 0.6.6 - Page:   " + pageNumber);
                 contentStream.endText();
 
             }
